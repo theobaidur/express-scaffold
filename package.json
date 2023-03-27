@@ -3,6 +3,10 @@
   "license": "MIT",
   "version": "1.0.0",
   "description": "Express scaffold for building REST APIs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theobaidur/express-scaffold.git"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
