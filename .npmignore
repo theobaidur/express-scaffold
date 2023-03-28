@@ -3,3 +3,5 @@ node_modules
 .parcel-cache
 .env
 src
+tsconfig.json
+tsconfig.tsbuildinfo
