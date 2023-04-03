@@ -1,15 +1,12 @@
-import ControllerError from "./controller-error";
 import ControllerResponse from "./controller-response";
-import { ExpressApp } from "./express-app";
-import * as ExpressRoute from "./route";
-const APP_NAME = "Enablemint";
-const APP_VERSION = "1.0.0";
-
+import { ExpressController as BaseController  } from "./express-controller";
+import { ExpressApp as App } from "./express-app";
+import * as Decorators from "./decorators";
+import type { ControllerMethod } from "./decorators";
 export {
-  APP_NAME,
-  APP_VERSION,
-  ControllerError,
   ControllerResponse,
-  ExpressRoute,
-  ExpressApp,
+  BaseController,
+  App,
+  Decorators,
+  ControllerMethod,
 };

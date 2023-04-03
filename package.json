@@ -1,8 +1,14 @@
 {
-  "name": "@theobaidur/express-scaffold",
+  "name": "@theobaidur/typescript-express-api-scaffold",
   "license": "MIT",
-  "version": "1.0.1",
-  "description": "Express scaffold for building REST APIs",
+  "version": "1.0.2",
+  "description": "A faster way to develop REST APIs with Express and TypeScript",
+  "tags": [
+    "express",
+    "typescript",
+    "rest",
+    "api"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/theobaidur/express-scaffold.git"
