@@ -49,52 +49,49 @@ import {ControllerResponse, Decorators} from '@theobaidur/typescript-express-api
 
 @Decorators.Controller('/example') 
 export class ExampleController {
-  @Decorators.Get('/hello')
-  public async hello(): Promise<ControllerResponse> {
-    @Decorators.Get('/')
-    public async example(req: any) {
-        const data = await Promise.resolve({message: 'Hello World'});
-        const response = new ControllerResponse();
-        response.data = data;
-        return response;
-    }
+  @Decorators.Get('/')
+  public async example(req: any) {
+      const data = await Promise.resolve({message: 'Hello World'});
+      const response = new ControllerResponse();
+      response.data = data;
+      return response;
+  }
 
-    @Decorators.Get('/error')
-    public async error(req: any) {
-        const response = new ControllerResponse();
-        response.code = 500;
-        response.message = 'Internal Server Error';
-        response.error = ['Something went wrong'];
-        return response;
-    }
+  @Decorators.Get('/error')
+  public async error(req: any) {
+      const response = new ControllerResponse();
+      response.code = 500;
+      response.message = 'Internal Server Error';
+      response.error = ['Something went wrong'];
+      return response;
+  }
 
-    @Decorators.Get('/success')
-    public async withSuccess(req: any) {
-        return ControllerResponse.success({data: 'Hello World'}, 'Addinional data like pagination, etc. goes here', 'Any friendly message goes here');
-    }
+  @Decorators.Get('/success')
+  public async withSuccess(req: any) {
+      return ControllerResponse.success({data: 'Hello World'}, 'Addinional data like pagination, etc. goes here', 'Any friendly message goes here');
+  }
 
-    @Decorators.Get('/error')
-    public async withError(req: any) {
-        return ControllerResponse.error()
-    }
+  @Decorators.Get('/error')
+  public async withError(req: any) {
+      return ControllerResponse.error()
+  }
 
-    @Decorators.Get('/stream')
-    public async stream(req: any) {
-        const response = new ControllerResponse();
-        response.is_stream = true;
-        response.file_name = 'test.txt';
-        response.file_type = 'text/plain';
-        response.data = 'Hello World';
-        return response;
-    }
+  @Decorators.Get('/stream')
+  public async stream(req: any) {
+      const response = new ControllerResponse();
+      response.is_stream = true;
+      response.file_name = 'test.txt';
+      response.file_type = 'text/plain';
+      response.data = 'Hello World';
+      return response;
+  }
 
-    @Decorators.Get('/redirect')
-    public async redirect(req: any, res: any) {
-        const response = new ControllerResponse();
-        response.is_redirect = true;
-        response.redirect_url = 'http://localhost:3000/example';      
-        return response;
-    }
+  @Decorators.Get('/redirect')
+  public async redirect(req: any, res: any) {
+      const response = new ControllerResponse();
+      response.is_redirect = true;
+      response.redirect_url = 'http://localhost:3000/example';      
+      return response;
   }
 }
 ```
