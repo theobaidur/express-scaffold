@@ -2,7 +2,6 @@ import express from "express";
 import { Schema } from "express-validator";
 import "reflect-metadata";
 import ControllerResponse from "./controller-response";
-import { ExpressController } from "./express-controller";
 export const BASE_PATH = "base_path";
 export const ROUTES = "routes";
 
@@ -17,8 +16,8 @@ type Method =
   | "head";
 
 export type ControllerMethod = (
-  request: express.Request,
-  response: express.Response
+  request?: express.Request,
+  response?: express.Response
 ) => Promise<ControllerResponse>;
 
 
@@ -32,12 +31,11 @@ export type RouteConfig = {
 
 /**
  * Class Decorator for Controllers
- * The target class must extend ExpressController
  * @param path {string} - Path of the controller, if not provided, the name of the class will be used
  * @returns 
  */
 function Controller(path?: string) {
-  return function<T extends new(...args: any[]) => ExpressController>(constructor: T) {
+  return function<T extends { new(...args: any[]): {} }>(constructor: T) {
     if (path === undefined) {
       path = constructor.name;
     }
@@ -49,21 +47,15 @@ function Controller(path?: string) {
   };
 }
 
-type DescriptorType = TypedPropertyDescriptor<(req?: express.Request, res?: express.Response)=>Promise<ControllerResponse>>;
 
-/**
- * Factory for Route Decorators
- * @param method {Method} - HTTP Method
- * @returns {Function}
- * @constructor
- * */
-function RouteFactory(method: Method): Function {
+
+function RouteFactory(method: Method) {
   return function (
     path?: string,
     schema?: Schema,
     handlers: express.RequestHandler[] = []
   ) {
-    return function<T extends ExpressController> (target: T, key: string, descriptor: DescriptorType): DescriptorType {
+    return function (target: any, key: string, descriptor: TypedPropertyDescriptor<ControllerMethod>): TypedPropertyDescriptor<ControllerMethod> {
       const controller = target.constructor;
       const routes = Reflect.getMetadata(ROUTES, controller) || [];
       if (path === undefined) {
@@ -92,7 +84,6 @@ function RouteFactory(method: Method): Function {
  * @param path {string} - Path of the route, if not provided, the name of the method will be used
  * @param schema {Schema} - Schema for validation, using express-validator
  * @param handlers {RequestHandler[]} - Express Request Handlers
- * @returns {MethodDecorator}
  */
 const Get = RouteFactory("get");
 /**
@@ -100,7 +91,6 @@ const Get = RouteFactory("get");
  * @param path {string} - Path of the route, if not provided, the name of the method will be used
  * @param schema {Schema} - Schema for validation, using express-validator
  * @param handlers {RequestHandler[]} - Express Request Handlers
- * @returns {MethodDecorator}
  * */
 const Post = RouteFactory("post");
 /**
@@ -108,7 +98,6 @@ const Post = RouteFactory("post");
  * @param path {string} - Path of the route, if not provided, the name of the method will be used
  * @param schema {Schema} - Schema for validation, using express-validator
  * @param handlers {RequestHandler[]} - Express Request Handlers
- * @returns {MethodDecorator}
  * */
 const Put = RouteFactory("put");
 /**
@@ -116,7 +105,6 @@ const Put = RouteFactory("put");
  * @param path {string} - Path of the route, if not provided, the name of the method will be used
  * @param schema {Schema} - Schema for validation, using express-validator
  * @param handlers {RequestHandler[]} - Express Request Handlers
- * @returns {MethodDecorator}
  * */
 const Delete = RouteFactory("delete");
 /**
@@ -124,7 +112,6 @@ const Delete = RouteFactory("delete");
  * @param path {string} - Path of the route, if not provided, the name of the method will be used
  * @param schema {Schema} - Schema for validation, using express-validator
  * @param handlers {RequestHandler[]} - Express Request Handlers
- * @returns {MethodDecorator}
  * */
 const Patch = RouteFactory("patch");
 /**
@@ -132,7 +119,6 @@ const Patch = RouteFactory("patch");
  * @param path {string} - Path of the route, if not provided, the name of the method will be used
  * @param schema {Schema} - Schema for validation, using express-validator
  * @param handlers {RequestHandler[]} - Express Request Handlers
- * @returns {MethodDecorator}
  * */
 const Options = RouteFactory("options");
 /**
@@ -140,7 +126,6 @@ const Options = RouteFactory("options");
  * @param path {string} - Path of the route, if not provided, the name of the method will be used
  * @param schema {Schema} - Schema for validation, using express-validator
  * @param handlers {RequestHandler[]} - Express Request Handlers
- * @returns {MethodDecorator}
  * */
 const Head = RouteFactory("head");
 /**
@@ -148,7 +133,6 @@ const Head = RouteFactory("head");
  * @param path {string} - Path of the route, if not provided, the name of the method will be used
  * @param schema {Schema} - Schema for validation, using express-validator
  * @param handlers {RequestHandler[]} - Express Request Handlers
- * @returns {MethodDecorator}
  * */
 const All = RouteFactory("all");
 

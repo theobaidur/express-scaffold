@@ -3,9 +3,6 @@ import listEndpoints from "express-list-endpoints";
 import { checkSchema, validationResult } from "express-validator";
 import ControllerResponse from "./controller-response";
 import { BASE_PATH, ControllerMethod, RouteConfig, ROUTES } from "./decorators";
-import { ExpressController } from "./express-controller";
-
-type ExpressControllerClassType = new (...args: any[]) => ExpressController;
 
 
 export class ExpressApp {
@@ -14,9 +11,9 @@ export class ExpressApp {
   ) {}
   /**
    * Add a controller to the express app
-   * @param controller {ExpressController} - Controller to be registered
+   * @param controller {class} - Controller to be registered
    */
-  private registerController<T extends ExpressControllerClassType>(controller: T): void {
+  private registerController<T extends { new(...args: any[]): {} }>(controller: T): void {
     const basePath = Reflect.getMetadata(BASE_PATH, controller);
     const routes: RouteConfig[] = Reflect.getMetadata(ROUTES, controller);
     const instance = new controller();
@@ -94,7 +91,7 @@ export class ExpressApp {
    * @param controllers {ExpressController[]} - List of controllers to be registered
    * @returns {void}
    * */
-  useController<T extends ExpressControllerClassType>(...controllers: T[]): void {
+  useController<T extends { new(...args: any[]): {} }>(...controllers: T[]): void {
     controllers.forEach((controller) => {
       this.registerController(controller);
     });

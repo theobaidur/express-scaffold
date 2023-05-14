@@ -38,12 +38,12 @@ yarn add @theobaidur/typescript-express-api-scaffold
 
 ## Usage
 There are mainly 4 steps to use this library:
-- Define the controllers
+- Define Controllers
 - Instantiate the app
 - Register the controllers with the app
 - Start the app
 
-### Define the controllers
+### Defining Controller
 ```typescript
 import {ControllerResponse, Decorators} from '@theobaidur/typescript-express-api-scaffold';
 
@@ -203,32 +203,43 @@ export class ExampleController {
 }
 ```
 
-Each method should return a `Promise<ControllerResponse>`. The `ControllerResponse` is a class that is used to format the response. See below for more details.
+Each controller method must return a `Promise<ControllerResponse>`. The `ControllerResponse` is a class that is used to format the response. See below for more details.
 
 ### ControllerResponse
-The `ControllerResponse` is a class that is used to format the response. It has following structure:
+Another aim of the library is to standardize the response format so that the client can easily handle the response. The `ControllerResponse` is a class that is used to format the response. There's a `toJSON` method that returns the response in the following format:
+```typescript
+{
+  success: boolean; // whether the request was successful
+  message: string | undefined; // optional message to be sent to the client
+  code: number; // status code of the response
+  data: any; // data to be sent to the client
+  meta: any; // meta data to be sent to the client, for example, pagination data
+  error: any; // error to be sent to the client
+}
+``` 
+
+`ControllerResponse` has following structure:
 ```typescript
 class ControllerResponse {
-  public message?: string;
-  public data?: any;
-  public meta?: any;
-  public error: any;
-  public is_stream: boolean;
-  public file_name: string;
-  public file_type: string;
-  public is_redirect: boolean;
-  public redirect_url: string;
-  public code: number;
-  constructor(message?: string, code?: number, data?: any, meta?: any, error?: any);
-  public toJSON(): {success: boolean; message: string | undefined; code: number; data: any; meta: any;error: any;};
-  static success(data?: any, meta?: any, message?: string, code?: number): ControllerResponse;
-  static error(errors?: any, code?: number, message?: string): ControllerResponse;
-  static stream(file_name: string, data: any, file_type?: string, message?: string): ControllerResponse;
-  static redirect(url: string, code?: number): ControllerResponse;
+  public message?: string; // optional message to be sent to the client
+  public data?: any; // data to be sent to the client
+  public meta?: any; // meta data to be sent to the client, for example, pagination data
+  public error: any; // error to be sent to the client
+  public is_stream: boolean; // whether the response is a stream i.e. file download
+  public file_name: string; // name of the file to be downloaded, if the response is a stream
+  public file_type: string; // type of the file to be downloaded, if the response is a stream
+  public is_redirect: boolean; // whether the response is a redirect
+  public redirect_url: string; // url to redirect to, if the response is a redirect
+  public code: number; // status code of the response
+
+  constructor(message?: string, code?: number, data?: any, meta?: any, error?: any); // constructor
+
+  public toJSON(): {success: boolean; message: string | undefined; code: number; data: any; meta: any;error: any;}; // returns the response in the above format
+
+  static success(data?: any, meta?: any, message?: string, code?: number): ControllerResponse; // returns a success response
+  static error(errors?: any, code?: number, message?: string): ControllerResponse; // returns an error response
+  static stream(file_name: string, data: any, file_type?: string, message?: string): ControllerResponse; // returns a stream response
+  static redirect(url: string, code?: number): ControllerResponse; // returns a redirect response
 }
 ```
-
-### BaseController
-### App
-### ControllerMethod
 
