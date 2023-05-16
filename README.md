@@ -15,10 +15,12 @@ In express projects, we usually use separte files for routes, controllers, valid
 
 Another problem was to decide the response format. Without proper response format, it was getting harder to integrate the API with the frontend. Also, form validation was getting harder. 
 
-I din't want to overwhelm the library with too many features like including commonly used middlewares, etc. I wanted to make it as simple as possible. 
 
 ## __Caution:__ 
 This library is still in its early stage, aimed at building REST APIs. It is not meant for building full blown web applications. 
+
+I din't want to overwhelm the library with too many features like including commonly used middlewares, etc. I wanted to make it as simple as possible. Its upto the user to decide which middlewares to use.
+
 
 ## Components
 The library has 4 main components:
@@ -50,7 +52,7 @@ import {ControllerResponse, Decorators} from '@theobaidur/typescript-express-api
 @Decorators.Controller('/example') 
 export class ExampleController {
   @Decorators.Get('/')
-  public async example(req: any) {
+  public async example(req: express.Request, res: express.Response) {
       const data = await Promise.resolve({message: 'Hello World'});
       const response = new ControllerResponse();
       response.data = data;
@@ -58,7 +60,7 @@ export class ExampleController {
   }
 
   @Decorators.Get('/error')
-  public async error(req: any) {
+  public async error(req: express.Request, res: express.Response) {
       const response = new ControllerResponse();
       response.code = 500;
       response.message = 'Internal Server Error';
@@ -67,17 +69,17 @@ export class ExampleController {
   }
 
   @Decorators.Get('/success')
-  public async withSuccess(req: any) {
+  public async withSuccess(req: express.Request, res: express.Response) {
       return ControllerResponse.success({data: 'Hello World'}, 'Addinional data like pagination, etc. goes here', 'Any friendly message goes here');
   }
 
   @Decorators.Get('/error')
-  public async withError(req: any) {
+  public async withError(req: express.Request, res: express.Response) {
       return ControllerResponse.error()
   }
 
   @Decorators.Get('/stream')
-  public async stream(req: any) {
+  public async stream(req: express.Request, res: express.Response) {
       const response = new ControllerResponse();
       response.is_stream = true;
       response.file_name = 'test.txt';
@@ -87,7 +89,7 @@ export class ExampleController {
   }
 
   @Decorators.Get('/redirect')
-  public async redirect(req: any, res: any) {
+  public async redirect(req: express.Request, res: express.Response) {
       const response = new ControllerResponse();
       response.is_redirect = true;
       response.redirect_url = 'http://localhost:3000/example';      
@@ -167,38 +169,42 @@ The `path` is optional. If not provided, the path will be the name of the method
 
 The `schema` is also optional. It is used to validate the input data. I uses [express-validator](https://express-validator.github.io/docs/)'s [schema](https://express-validator.github.io/docs/schema-validation) to validate the input data. If you provide the schema, then the input data will be validated before the method is called.
 
-The `handlers` is also optional. It is used to add additional middlewares to the method. 
+The `handlers` is also optional. It is used to add additional [middlewares](https://expressjs.com/en/guide/writing-middleware.html) to the method. 
 
 ```typescript
 @Decorators.Controller('/example')
 export class ExampleController {
   @Decorators.Get() // path will be /example/hello
-  public async hello(): Promise<ControllerResponse> {
+  public async hello(req: express.Request, res: express.Response): Promise<ControllerResponse> {
     // ...
   }
 
   @Decorators.Get('/hello') // path will be /example/hello
-  public async hello(): Promise<ControllerResponse> {
+  public async hello(req: express.Request, res: express.Response): Promise<ControllerResponse> {
     // ...
   }
 
   @Decorators.Get('/hello/:id') // path will be /example/hello/:id
-  public async hello(): Promise<ControllerResponse> {
+  public async hello(req: express.Request, res: express.Response): Promise<ControllerResponse> {
     // ...
   }
   
 
   @Decorators.Get('/hello', {name: {in: ['body'], isString: true}}) // path will be /example/hello
-  public async hello(req: any): Promise<ControllerResponse> {
+  public async hello(req: express.Request, res: express.Response): Promise<ControllerResponse> {
     // ...
   }
 
   @Decorators.Get('/hello', {name: {in: ['body'], isString: true}}, [middleware1, middleware2]) // path will be /example/hello
-  public async hello(req: any): Promise<ControllerResponse> {
+  public async hello(req: express.Request, res: express.Response): Promise<ControllerResponse> {
     // ...
   }
 }
 ```
+
+Each method decorator passes 2 parameters to the method:
+- `req` - The request object which is an instance of `express.Request`
+- `res` - The response object which is an instance of `express.Response`
 
 Each controller method must return a `Promise<ControllerResponse>`. The `ControllerResponse` is a class that is used to format the response. See below for more details.
 
@@ -239,4 +245,47 @@ class ControllerResponse {
   static redirect(url: string, code?: number): ControllerResponse; // returns a redirect response
 }
 ```
+
+## FAQs
+
+### _How do I add additional middlewares?_
+You can add middlewares in two different ways:
+- Using the `handlers` parameter of the method decorator to add middlewares to a specific method/route/end-point
+
+  ```typescript
+  @Decorators.Get('/hello', {name: {in: ['body'], isString: true}}, [middleware1, middleware2]) // path will be /example/hello 
+  public async hello(req: express.Request, res: express.Response): Promise<ControllerResponse> {
+    // ...
+  }
+  ```
+- Using the `App.useMiddleware(...middlewareList: express.RequestHandler[])` method to add middlewares to all the routes/end-points
+
+  ```typescript
+  App.useMiddleware(middleware1, middleware2);
+  ```
+
+### _How do I add additional routes?_
+`App` class has a `useRoute(method: string, path: string, ...handlers: RequestHandler[])` method that can be used to add additional routes. For example:
+
+```typescript
+App.useRoute('get', '/hello', middleware1, middleware2);
+```
+
+Infact, you can use `useRoute` method to serve your index.html file for your SPA application. For example:
+```typescript
+App.useRoute('get', '*', (req: express.Request, res: express.Response) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+```
+
+But remember, like all express routes, the order is important. The routes are matched in the order they are added.
+
+### _I already have an express app. Can I use it with this library?_
+
+Yes, you can. The constructor of the `App` class accepts an optional parameter of type `express.Application`. If you pass your express app to the constructor, then the library will use that app instead of creating a new one. For example:
+```typescript
+const myExpressApp = express();
+const app = new App(myExpressApp);
+```
+
 
