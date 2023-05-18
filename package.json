@@ -35,7 +35,7 @@
     "version": "changeset version",
     "prepublish": "npm run build && changeset version",
     "publish": "changeset publish",
-    "postpublish": "git push --follow-tags origin master"
+    "postpublish": "git push --follow-tags origin main"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
