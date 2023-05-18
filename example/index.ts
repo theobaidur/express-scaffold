@@ -1,4 +1,4 @@
-import {App, ControllerResponse, Decorators} from '@theobaidur/typescript-express-api-scaffold/dist';
+import {App, ControllerResponse, Decorators} from '@theobaidur/typescript-express-api-scaffold';
 
 @Decorators.Controller()
 class ExampleController{

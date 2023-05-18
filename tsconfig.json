@@ -10,6 +10,6 @@
     "noUncheckedIndexedAccess": true,
     "noEmit": true,
     "experimentalDecorators": true,
-    "composite": true
-  }
+  },
+  "include": ["src/**/*"]
 }
