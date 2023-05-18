@@ -49,5 +49,8 @@
     "express-list-endpoints": "^6.0.0",
     "express-validator": "^6.14.2",
     "reflect-metadata": "^0.1.13"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
