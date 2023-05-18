@@ -1,22 +1,15 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "strictNullChecks": true,
-    "noUnusedLocals": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "composite": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
+    "target": "ES2016",
     "module": "commonjs",
-    "outDir": "dist",
-    "rootDir": "src",
-    "target": "es5",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "esModuleInterop": true,
-    "declaration": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "composite": true
+  }
 }

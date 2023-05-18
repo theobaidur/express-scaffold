@@ -15,7 +15,14 @@ export class ExpressApp {
    */
   private registerController<T extends { new(...args: any[]): {} }>(controller: T): void {
     const basePath = Reflect.getMetadata(BASE_PATH, controller);
-    const routes: RouteConfig[] = Reflect.getMetadata(ROUTES, controller);
+    // if no base path is defined, throw an error
+    if(basePath === undefined) {
+      throw new Error(`Looks like you forgot to decorate the controller with @Controller() decorator`);
+    }
+    const routes: RouteConfig[] = Reflect.getMetadata(ROUTES, controller) || [];
+    if(routes.length === 0) {
+      console.warn(`No routes defined for ${controller.name}. Did you forget to add method decorator?`);
+    }
     const instance = new controller();
     routes.forEach((route) => {
       const { method, path, handlers, schema } = route;
@@ -147,5 +154,14 @@ export class ExpressApp {
         path: e.path,
       }))
     );
+  }
+
+  /**
+   * Get the instance of the express app
+   * @returns {express.Application}
+   */
+
+  get app(): express.Application {
+    return this.expressApp;
   }
 }

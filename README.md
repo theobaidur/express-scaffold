@@ -136,7 +136,7 @@ Listening on port 3000
 Decorators are the key to this library. There are mainly 2 types of decorators:
 - Controller decorators
 - Method decorators
-#### Controller decorators
+#### Controller decorator
 - `@Controller(path?: string)` - This decorator is used to define the path of the controller. It should be used on the class definition. Path is optional. If not provided, the path will be the name of the class in lowercase. This `path` serves as the base path for all the methods in the controller. For example, if the path is `/example`, then the method path will be `/example/hello`. If the path is not provided, then the method path will be `/examplecontroller/hello`.
 ```typescript
 @Decorators.Controller() // path will be /ExampleController
@@ -245,6 +245,16 @@ class ControllerResponse {
   static redirect(url: string, code?: number): ControllerResponse; // returns a redirect response
 }
 ```
+
+### ExpressApp
+The `ExpressApp` class is used to create an express app. It has following methods:
+- `useMiddleware(...middlewareList: express.RequestHandler[])` - used to add middlewares to all the routes/end-points
+- `useRoute(method: string, path: string, ...handlers: RequestHandler[])` - used to add additional routes
+- `useController(...controllers: any[])` - used to add a controller to the app. It takes a list of controllers as parameters. Each controller must be a class that has methods decorated with the `@Decorators.Controller` decorator. See below for more details.
+- `listen(port: number, callback?: () => void)` - used to start the server. It takes the port number as parameter. It also takes an optional callback function that will be called when the server starts.
+- `app()` - returns the instance of the express app. Its a getter method. So, you don't need to call it as a function. For example, `App.app` will return the instance of the express app.
+
+
 
 ## FAQs
 

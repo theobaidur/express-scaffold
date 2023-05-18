@@ -47,9 +47,12 @@ class ExampleController{
         return response;
     }
 } 
-
+@Decorators.Controller()
+class Class2{
+    
+}
 const Api = new App();
-Api.useController(ExampleController);
+Api.useController(ExampleController, Class2);
 
 
 Api.listen(3000, () => {

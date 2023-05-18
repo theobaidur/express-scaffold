@@ -9,20 +9,35 @@
     "rest",
     "api"
   ],
+  "author": {
+    "name": "Obaidur Rahman",
+    "url": "https://theobaidur.github.io"
+  },
+  "keywords": [
+    "express",
+    "typescript",
+    "rest",
+    "api"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/theobaidur/express-scaffold.git"
   },
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc -w",
-    "deploy": "npm run build && npm publish --access public"
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --clean --watch",
+    "lint": "tsc",
+    "deploy": "npm run build && npm publish --access public",
+    "changeset": "changeset"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.1",
     "@types/express": "^4",
     "@types/express-list-endpoints": "^6",
+    "tsup": "^6.7.0",
     "typescript": "^4.8.4"
   },
   "dependencies": {
