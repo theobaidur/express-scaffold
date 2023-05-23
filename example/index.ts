@@ -1,4 +1,5 @@
 import {App, ControllerResponse, Decorators} from '@theobaidur/typescript-express-api-scaffold';
+import { Router } from 'express';
 
 @Decorators.Controller()
 class ExampleController{
@@ -54,7 +55,31 @@ class Class2{
 const Api = new App();
 Api.useController(ExampleController, Class2);
 
+const ApiRoute = Router();
 
+ApiRoute.get('/test', (req: any, res: any) => {
+    res.send('Hello World');
+});
+
+
+Api.use('/api', ApiRoute);
 Api.listen(3000, () => {
     console.log('Listening on port 3000');
 });
+
+/**
+ * OUTPUT
+No routes defined for Class2. Did you forget to add method decorator?
+Server running on port 3000
+┌─────────┬─────────┬───────────────────────────────┐
+│ (index) │ methods │             path              │
+├─────────┼─────────┼───────────────────────────────┤
+│    0    │  'GET'  │     '/ExampleController/'     │
+│    1    │  'GET'  │  '/ExampleController/error'   │
+│    2    │  'GET'  │ '/ExampleController/success'  │
+│    3    │  'GET'  │  '/ExampleController/stream'  │
+│    4    │  'GET'  │ '/ExampleController/redirect' │
+│    5    │  'GET'  │          '/api/test'          │
+└─────────┴─────────┴───────────────────────────────┘
+Listening on port 3000
+ */

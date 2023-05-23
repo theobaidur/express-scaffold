@@ -120,6 +120,17 @@ export class ExpressApp {
   }
 
   /**
+   * Wrapper for {@link express.Application.use}
+   * All the arguments passed to this method will be passed to express app.use
+   * @param args {any[]} - Arguments to be passed to express app.use
+   * @returns 
+   */
+
+  use: express.Application["use"] = (...args: any[]) => {
+    return this.expressApp.use(...args);
+  }
+
+  /**
    * Start the express app
    * @param port {number} - Port number to listen on
    * @param callback {()=>void} - Callback to be executed after the server starts

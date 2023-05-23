@@ -250,7 +250,8 @@ class ControllerResponse {
 The `ExpressApp` class is used to create an express app. It has following methods:
 - `useMiddleware(...middlewareList: express.RequestHandler[])` - used to add middlewares to all the routes/end-points
 - `useRoute(method: string, path: string, ...handlers: RequestHandler[])` - used to add additional routes
-- `useController(...controllers: any[])` - used to add a controller to the app. It takes a list of controllers as parameters. Each controller must be a class that has methods decorated with the `@Decorators.Controller` decorator. See below for more details.
+- `useController(...controllers: any[])` - used to add a controller to the app. It takes a list of controllers as parameters. Each controller must be a class that has methods decorated with the `@Decorators.Controller` decorator. See [above](#decorators) for more details.
+- `use(...args: any[])` - A wrapper around the `express.use` method. It takes the same parameters as the `express.use` method. See [here](https://expressjs.com/en/4x/api.html#app.use) for more details.
 - `listen(port: number, callback?: () => void)` - used to start the server. It takes the port number as parameter. It also takes an optional callback function that will be called when the server starts.
 - `app()` - returns the instance of the express app. Its a getter method. So, you don't need to call it as a function. For example, `App.app` will return the instance of the express app.
 

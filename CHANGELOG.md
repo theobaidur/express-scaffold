@@ -1,5 +1,13 @@
 # @theobaidur/typescript-express-api-scaffold
 
+## 2.0.4
+
+### Patch Changes
+
+- Added `use` method which is a wrapper around `express.Application.use` method.
+- Updated docs
+- Updated example
+
 ## 2.0.3
 
 ### Patch Changes
