@@ -1,5 +1,11 @@
 # @theobaidur/typescript-express-api-scaffold
 
+## 2.0.5
+
+### Patch Changes
+
+- Code cleanup only
+
 ## 2.0.4
 
 ### Patch Changes
