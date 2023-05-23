@@ -1,3 +1,24 @@
+type BaseResponseType = {
+  message?: string;
+  code: number;
+  meta?: any;
+}
+
+export type SuccessResponseType<T=any, M=any> = BaseResponseType & {
+  success: true;
+  data?: T;
+  meta?: M;
+}
+
+export type ErrorResponseType<T=any, M=any> = BaseResponseType & {
+  success: false;
+  error?: T;
+  meta?: M;
+}
+
+export type ControllerResponseType = SuccessResponseType | ErrorResponseType;
+
+
 /**
  * ControllerResponse is a class that is used to return a response from a controller.
  */
@@ -130,7 +151,7 @@ export default class ControllerResponse {
       data: this.data,
       meta: this.meta,
       error: this.error,
-    };
+    } as ControllerResponseType;
   }
 
   /**

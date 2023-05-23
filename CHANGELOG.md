@@ -1,5 +1,12 @@
 # @theobaidur/typescript-express-api-scaffold
 
+## 2.0.6
+
+### Patch Changes
+
+- Added type definition for the response
+- Updated doc
+
 ## 2.0.5
 
 ### Patch Changes

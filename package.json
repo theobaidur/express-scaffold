@@ -1,7 +1,7 @@
 {
   "name": "@theobaidur/typescript-express-api-scaffold",
   "license": "MIT",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "A faster way to develop REST APIs with Express and TypeScript",
   "tags": [
     "express",
@@ -33,8 +33,9 @@
     "deploy": "npm run build && npm publish --access public",
     "changeset": "changeset",
     "version": "changeset version",
-    "prepublish": "npm run build && changeset version && git push --tags",
-    "publish": "changeset publish"
+    "prepublish": "npm run build && changeset version",
+    "publish": "changeset publish",
+    "push": "git push --follow-tags origin main"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",

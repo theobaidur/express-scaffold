@@ -223,6 +223,24 @@ Another aim of the library is to standardize the response format so that the cli
 
 `ControllerResponse` has following structure:
 ```typescript
+type BaseResponseType = {
+  message?: string;
+  code: number;
+  meta?: any;
+}
+
+type SuccessResponseType<T=any, M=any> = BaseResponseType & {
+  success: true;
+  data?: T;
+  meta?: M;
+}
+
+type ErrorResponseType<T=any, M=any> = BaseResponseType & {
+  success: false;
+  error?: T;
+  meta?: M;
+}
+
 class ControllerResponse {
   public message?: string; // optional message to be sent to the client
   public data?: any; // data to be sent to the client
@@ -237,7 +255,7 @@ class ControllerResponse {
 
   constructor(message?: string, code?: number, data?: any, meta?: any, error?: any); // constructor
 
-  public toJSON(): {success: boolean; message: string | undefined; code: number; data: any; meta: any;error: any;}; // returns the response in the above format
+  public toJSON(): ControllerResponseType; // returns the response in the above format
 
   static success(data?: any, meta?: any, message?: string, code?: number): ControllerResponse; // returns a success response
   static error(errors?: any, code?: number, message?: string): ControllerResponse; // returns an error response
